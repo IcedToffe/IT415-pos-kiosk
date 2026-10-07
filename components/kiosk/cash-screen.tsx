@@ -87,11 +87,11 @@ export function CashScreen({ total, onPay, onError, onBack }: Props) {
             autoComplete="off"
             placeholder="0.00"
             value={value}
-            onChange={(e) => update(e.target.value.replace(/[^\d.,]/g, ""))}
+            onChange={(e) => update(e.target.value.replace(/[^\d.,-]/g, ""))}
             onKeyDown={(e) => e.key === "Enter" && pay()}
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? "cash-error" : undefined}
-            className="w-full min-w-0 bg-transparent text-3xl font-extrabold tabular-nums outline-none select-text placeholder:text-slate-300 sm:text-[40px]"
+            className="h-full w-full min-w-0 bg-transparent text-3xl font-extrabold tabular-nums outline-none select-text placeholder:text-slate-300 sm:text-[40px]"
           />
         </div>
 

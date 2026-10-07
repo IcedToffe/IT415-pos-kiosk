@@ -7,6 +7,9 @@ export const peso = (centavos: number) =>
     maximumFractionDigits: 2,
   });
 
+/** Largest cash amount the kiosk accepts: ₱100,000.00. */
+export const MAX_CASH = 10_000_000;
+
 export type PaymentError = { title: string; detail: string };
 
 export type ParsedAmount = { ok: true; cents: number } | ({ ok: false } & PaymentError);
@@ -21,6 +24,9 @@ export function parseAmount(raw: string): ParsedAmount {
       detail: "Tap a quick amount or use the keypad.",
     };
   }
+  if (s.startsWith("-")) {
+    return { ok: false, title: "Invalid amount.", detail: "Amount cannot be negative." };
+  }
   if (!/^\d+(\.\d{1,2})?$/.test(s)) {
     return {
       ok: false,
@@ -31,6 +37,13 @@ export function parseAmount(raw: string): ParsedAmount {
   const cents = Math.round(parseFloat(s) * 100);
   if (cents <= 0) {
     return { ok: false, title: "Invalid amount.", detail: "Amount must be greater than ₱0.00." };
+  }
+  if (cents > MAX_CASH) {
+    return {
+      ok: false,
+      title: "Invalid amount.",
+      detail: `Amount is too large. The maximum is ${peso(MAX_CASH)}.`,
+    };
   }
   return { ok: true, cents };
 }
