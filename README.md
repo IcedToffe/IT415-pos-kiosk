@@ -55,12 +55,21 @@ Receipt → New Transaction
 | 5–6 | Automatic subtotals and total | `cartLines`, `linesTotal` in `lib/pos/products.ts` |
 | 7–8 | Order Summary; Back keeps the cart | `components/kiosk/review-screen.tsx` |
 | 9 | Cash, QR Payment and Credit/Debit Card buttons | `components/kiosk/method-screen.tsx` |
-| 10–12 | Cash: rejects blank, invalid, zero and insufficient amounts; change = paid − total | `checkCashPayment` in `lib/pos/money.ts`, `components/kiosk/cash-screen.tsx` |
+| 10–12 | Cash: rejects blank, invalid, zero, negative, oversized and insufficient amounts; change = paid − total | `checkCashPayment` in `lib/pos/money.ts`, `components/kiosk/cash-screen.tsx` |
 | 13 | Simulated QR (generated code + Confirm Payment) | `lib/pos/qr.ts`, `components/kiosk/qr-screen.tsx` |
 | 14 | Simulated card ("Processing payment…") | `components/kiosk/card-screen.tsx` |
 | 15–17 | Payment Successful, unique TXN number, digital receipt | `completeTransaction`, `lib/pos/storage.ts`, `components/kiosk/result-screens.tsx` |
 | 18–19 | New Transaction clears cart, payment and receipt | `newTransaction` in `components/kiosk/kiosk.tsx` |
 | 20 | Toast feedback for every action and error | `components/kiosk/toast.tsx` |
+
+**Safeguards added after verification:**
+
+- Cash input rejects negative amounts and amounts over ₱100,000.00.
+- Transaction numbers are the sale's date and time plus a counter
+  (`TXN-YYYYMMDD-HHMMSS-NNNN`), so they do not repeat in a new browser or after a reset.
+- Every payment button is guarded, so a double-tap creates one transaction.
+- The Payment Successful and Receipt screens clear themselves after 1 minute idle, so the next
+  customer never sees the previous order.
 
 **Optional extras:** product categories, inventory with stock validation (stock is deducted only
 after a *successful* payment), on-screen keypad and quick amounts, print receipt.
