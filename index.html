@@ -5,12 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Campus Store POS Kiosk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <header class="topbar">
-        <div class="brand">🛒 CAMPUS STORE POS</div>
+        <div class="brand">CAMPUS STORE <span>Self-checkout</span></div>
         <ol class="steps" id="steps">
             <li data-step="select">Items</li>
             <li data-step="summary">Review</li>
@@ -24,16 +27,23 @@
         <!-- Screen 1: Item Selection -->
         <section id="screen-select" class="screen active">
             <div class="select-layout">
-                <div>
-                    <h1>Tap items to add to your order</h1>
+                <div class="catalog">
+                    <div class="catalog-head">
+                        <h1>Menu</h1>
+                        <p class="sub">Tap an item to add it to your order</p>
+                    </div>
                     <div class="products" id="products"></div>
                 </div>
                 <aside class="panel cart">
-                    <h2>Current Order</h2>
+                    <div class="cart-head">
+                        <h2>Your order</h2>
+                        <button id="btnClear" class="btn ghost">Clear</button>
+                    </div>
                     <div id="cartLines" class="cart-lines"></div>
-                    <div class="total-row"><span>TOTAL</span><span id="cartTotal">₱0.00</span></div>
-                    <button id="btnContinue" class="btn primary big">Continue to Payment</button>
-                    <button id="btnClear" class="btn ghost">Clear Order</button>
+                    <div class="cart-foot">
+                        <div class="total-row"><span>TOTAL</span><span id="cartTotal">₱0.00</span></div>
+                        <button id="btnContinue" class="btn primary big">Review order</button>
+                    </div>
                 </aside>
             </div>
         </section>
@@ -41,11 +51,11 @@
         <!-- Screen 2: Order / Payment Summary -->
         <section id="screen-summary" class="screen">
             <div class="panel wide">
-                <h1>Order Summary</h1>
+                <h1>Review your order</h1>
                 <div id="summaryTable"></div>
                 <div class="actions">
-                    <button id="btnSummaryBack" class="btn ghost big">← Back</button>
-                    <button id="btnSummaryContinue" class="btn primary big">Continue to Payment →</button>
+                    <button id="btnSummaryBack" class="btn ghost big">Back</button>
+                    <button id="btnSummaryContinue" class="btn primary big">Continue to payment</button>
                 </div>
             </div>
         </section>
@@ -53,23 +63,22 @@
         <!-- Screen 3: Payment Method -->
         <section id="screen-method" class="screen">
             <div class="panel wide">
-                <h1>Choose Payment Method</h1>
-                <p class="amount-due">Total due: <strong class="dueText"></strong></p>
+                <h1>How would you like to pay?</h1>
+                <p class="amount-due">Total due <strong class="dueText"></strong></p>
                 <div class="method-grid">
-                    <button class="method-btn" data-method="Cash"><span class="icon">💵</span>Cash</button>
-                    <button class="method-btn" data-method="QR Payment"><span class="icon">📱</span>QR Payment</button>
-                    <button class="method-btn" data-method="Credit/Debit Card"><span class="icon">💳</span>Credit /
-                        Debit Card</button>
+                    <button class="method-btn" data-method="Cash"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/></svg></span>Cash</button>
+                    <button class="method-btn" data-method="QR Payment"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><path d="M14 14h2.5v2.5H14zM18.5 18.5h2v2h-2zM18.5 14h2M14 20.5h2"/></svg></span>QR Payment</button>
+                    <button class="method-btn" data-method="Credit/Debit Card"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.2"/><path d="M2.5 9.5h19M6 15h4"/></svg></span>Credit / Debit Card</button>
                 </div>
-                <div class="actions"><button id="btnMethodBack" class="btn ghost big">← Back to Order</button></div>
+                <div class="actions"><button id="btnMethodBack" class="btn ghost big">Back</button></div>
             </div>
         </section>
 
         <!-- Cash payment -->
         <section id="screen-cash" class="screen">
             <div class="panel wide">
-                <h1>Cash Payment</h1>
-                <p class="amount-due">Total due: <strong class="dueText"></strong></p>
+                <h1>Cash payment</h1>
+                <p class="amount-due">Total due <strong class="dueText"></strong></p>
                 <label for="cashInput" class="field-label">Amount paid</label>
                 <input id="cashInput" class="cash-input" type="text" inputmode="decimal" autocomplete="off"
                     placeholder="0.00">
@@ -78,8 +87,8 @@
                 <div class="quick" id="quickAmounts"></div>
                 <div class="keypad" id="keypad"></div>
                 <div class="actions">
-                    <button id="btnCashBack" class="btn ghost big">← Back</button>
-                    <button id="btnPayNow" class="btn primary big">Pay Now</button>
+                    <button id="btnCashBack" class="btn ghost big">Back</button>
+                    <button id="btnPayNow" class="btn primary big">Pay now</button>
                 </div>
             </div>
         </section>
@@ -87,14 +96,14 @@
         <!-- QR payment -->
         <section id="screen-qr" class="screen">
             <div class="panel wide center">
-                <h1>QR Payment</h1>
-                <p class="amount-due">Amount to pay: <strong class="dueText"></strong></p>
+                <h1>Scan to pay</h1>
+                <p class="amount-due">Amount to pay <strong class="dueText"></strong></p>
                 <div id="qrBox" class="qr-box"></div>
-                <p>Scan the QR code using your supported payment application.</p>
-                <p class="hint">(Simulated — no real payment is made)</p>
+                <p>Scan the code with your payment app, then confirm.</p>
+                <p class="hint">Simulated. No real payment is made.</p>
                 <div class="actions">
-                    <button id="btnQrBack" class="btn ghost big">← Back</button>
-                    <button id="btnQrConfirm" class="btn primary big">Confirm Payment</button>
+                    <button id="btnQrBack" class="btn ghost big">Back</button>
+                    <button id="btnQrConfirm" class="btn primary big">Confirm payment</button>
                 </div>
             </div>
         </section>
@@ -103,13 +112,13 @@
         <section id="screen-card" class="screen">
             <div class="panel wide center">
                 <h1>Credit / Debit Card</h1>
-                <p class="amount-due">Amount due: <strong class="dueText"></strong></p>
-                <div class="card-art">💳</div>
+                <p class="amount-due">Amount due <strong class="dueText"></strong></p>
+                <div class="card-art"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.2"/><path d="M2.5 9.5h19M6 15h4"/></svg></div>
                 <p id="cardMsg" class="card-msg">Please tap, insert, or swipe your card.</p>
-                <p class="hint">(Simulated — no real card is charged)</p>
+                <p class="hint">Simulated. No real card is charged.</p>
                 <div class="actions">
-                    <button id="btnCardBack" class="btn ghost big">← Back</button>
-                    <button id="btnCardProcess" class="btn primary big">Process Payment</button>
+                    <button id="btnCardBack" class="btn ghost big">Back</button>
+                    <button id="btnCardProcess" class="btn primary big">Process payment</button>
                 </div>
             </div>
         </section>
@@ -118,9 +127,9 @@
         <section id="screen-success" class="screen">
             <div class="panel wide center">
                 <div class="check">✓</div>
-                <h1>Payment Successful</h1>
+                <h1>Payment successful</h1>
                 <div id="successDetails" class="kv"></div>
-                <button id="btnViewReceipt" class="btn primary big">View Receipt</button>
+                <button id="btnViewReceipt" class="btn primary big">View receipt</button>
             </div>
         </section>
 
@@ -129,8 +138,8 @@
             <div class="panel wide center">
                 <div id="receipt" class="receipt"></div>
                 <div class="actions">
-                    <button id="btnPrint" class="btn ghost big">🖨 Print</button>
-                    <button id="btnNew" class="btn primary big">New Transaction</button>
+                    <button id="btnPrint" class="btn ghost big">Print receipt</button>
+                    <button id="btnNew" class="btn primary big">New transaction</button>
                 </div>
             </div>
         </section>

@@ -14,6 +14,8 @@ const PRODUCTS = [
     { id: 6, name: 'Chocolate', price: 2500, emoji: '🍫', stock: 30 },
     { id: 7, name: 'Notebook', price: 6000, emoji: '📓', stock: 15 },
     { id: 8, name: 'Ballpen', price: 1500, emoji: '🖊️', stock: 60 },
+    { id: 9, name: 'Instant Noodles', price: 3000, emoji: '🍜', stock: 30 },
+    { id: 10, name: 'Iced Tea', price: 3000, emoji: '🧋', stock: 35 },
 ];
 
 const STORE_NAME = 'CAMPUS STORE POS';
