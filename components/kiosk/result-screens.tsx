@@ -130,6 +130,9 @@ export function ReceiptScreen({
           Keep this for your records. Tap New Transaction when you are done — your order and
           payment details will be cleared.
         </p>
+        <p className="mt-2 max-w-md text-slate-600">
+          The screen returns to the start automatically after 1 minute.
+        </p>
         <div className="mt-7 max-w-md space-y-4">
           <KioskButton onClick={onNewTransaction}>
             <Plus aria-hidden />

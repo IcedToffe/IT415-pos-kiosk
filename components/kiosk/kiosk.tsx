@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
 import {
@@ -40,6 +40,9 @@ const STEP: Record<Screen, StepState> = {
   success: { active: null, done: 3 },
   receipt: { active: 3, done: 3 },
 };
+
+/** How long a finished transaction stays on screen before the kiosk resets itself. */
+const IDLE_MS = 60_000;
 
 export function Kiosk() {
   const [screen, setScreen] = useState<Screen>("select");
@@ -148,15 +151,42 @@ export function Kiosk() {
     notify("Transaction completed successfully", "ok");
   };
 
-  const newTransaction = () => {
-    completing.current = false;
-    setCart({});
-    setReceipt(null);
-    setCategory("All");
-    setQr({ seed: 1, reference: "" });
-    setScreen("select");
-    notify("New transaction started — previous order cleared", "ok");
-  };
+  const resetTransaction = useCallback(
+    (message: string) => {
+      completing.current = false;
+      setCart({});
+      setReceipt(null);
+      setCategory("All");
+      setQr({ seed: 1, reference: "" });
+      setScreen("select");
+      notify(message, "ok");
+    },
+    [notify],
+  );
+
+  const newTransaction = () =>
+    resetTransaction("New transaction started — previous order cleared");
+
+  // A customer who walks away must not leave their order on screen for the next one.
+  useEffect(() => {
+    if (screen !== "success" && screen !== "receipt") return;
+    let timer: ReturnType<typeof setTimeout>;
+    const restart = () => {
+      clearTimeout(timer);
+      timer = setTimeout(
+        () => resetTransaction("Returned to start — previous order cleared"),
+        IDLE_MS,
+      );
+    };
+    restart();
+    window.addEventListener("pointerdown", restart);
+    window.addEventListener("keydown", restart);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("pointerdown", restart);
+      window.removeEventListener("keydown", restart);
+    };
+  }, [screen, resetTransaction]);
 
   return (
     <div
