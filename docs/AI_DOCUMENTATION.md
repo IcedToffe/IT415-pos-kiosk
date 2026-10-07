@@ -5,11 +5,10 @@ ChatGPT Plus
 Claude 
 
 ## Prompt 1
-"Help us create the product selection interface for our POS kiosk."
+"can you help me do this? using AI and Github making Kiosk base on this pdf."
 
 ## AI Response
-ChatGPT suggested using product cards with Add buttons
-and JavaScript event listeners.
+Yes. Based on the PDF, this is actually a good project for AI-assisted development + GitHub version control.
 
 ## Evaluation
 We reviewed the generated solution and determined that
