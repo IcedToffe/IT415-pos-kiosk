@@ -128,3 +128,35 @@
     @apply font-sans;
   }
 }
+/* ---------- Kiosk ---------- */
+@theme {
+  --color-kiosk: #eef1f6;
+  --animate-progress: progress 2s linear forwards;
+
+  @keyframes progress {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
+  }
+}
+
+/* Print only the digital receipt. */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #receipt,
+  #receipt * {
+    visibility: visible;
+  }
+
+  #receipt {
+    position: absolute;
+    inset: 0 auto auto 0;
+    box-shadow: none;
+  }
+}
