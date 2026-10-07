@@ -1,7 +1,8 @@
 # AI-Assisted Development Documentation
 
 ## AI Tool
-ChatGPT
+ChatGPT Plus
+Claude 
 
 ## Prompt 1
 "Help us create the product selection interface for our POS kiosk."
