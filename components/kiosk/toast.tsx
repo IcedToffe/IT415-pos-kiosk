@@ -32,7 +32,7 @@ export function Toast({ toast }: { toast: ToastState }) {
       role="status"
       aria-live="polite"
       className={cn(
-        "pointer-events-none fixed bottom-6 left-1/2 z-50 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center gap-3 rounded-full bg-slate-900 px-6 py-3.5 text-lg font-semibold text-white shadow-lg transition-all duration-200",
+        "pointer-events-none fixed bottom-6 left-1/2 z-50 flex w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center gap-3 rounded-full bg-slate-900 px-5 py-3 text-base font-semibold sm:px-6 sm:py-3.5 sm:text-lg text-white shadow-lg transition-all duration-200",
         toast.visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
       )}
     >
