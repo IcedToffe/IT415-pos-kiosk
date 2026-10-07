@@ -46,7 +46,7 @@ export function QrScreen({ total, seed, reference, onConfirm, onBack }: Props) {
             </g>
           </svg>
         </div>
-        <p className="mt-4 font-semibold text-slate-600">Ref: QR-{reference}</p>
+        <p className="mt-4 font-semibold text-slate-600">Ref: {reference}</p>
       </div>
 
       <div>

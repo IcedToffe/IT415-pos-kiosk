@@ -37,17 +37,25 @@ export function loadStock(): Stock {
 
 export const saveStock = (stock: Stock) => safeSet(STOCK_KEY, JSON.stringify(stock));
 
-const formatTxn = (n: number, year: number) =>
-  `TXN-${year}-${String(n).padStart(5, "0")}`;
+const pad = (n: number, length = 2) => String(n).padStart(length, "0");
+
+/** Local date and time of the sale as YYYYMMDD-HHMMSS. */
+const stamp = (d: Date) =>
+  `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}` +
+  `-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
 
 const lastTxn = () => parseInt(safeGet(COUNTER_KEY) ?? "", 10) || 0;
 
-/** The number the next completed transaction will get, without reserving it. */
-export const peekTxnNumber = (now: Date) => formatTxn(lastTxn() + 1, now.getFullYear());
+/** Reference shown on the QR screen, before the payment is confirmed. */
+export const qrReference = (now: Date) => `QR-${stamp(now)}`;
 
-/** Reserves and returns a unique, sequential transaction number. */
+/**
+ * Reserves and returns a unique transaction number, e.g. TXN-20261007-184512-0001.
+ * The date and time keep it unique even when the saved counter restarts
+ * (new browser, private window, cleared storage).
+ */
 export function nextTxnNumber(now: Date) {
   const n = lastTxn() + 1;
   safeSet(COUNTER_KEY, String(n));
-  return formatTxn(n, now.getFullYear());
+  return `TXN-${stamp(now)}-${pad(n, 4)}`;
 }

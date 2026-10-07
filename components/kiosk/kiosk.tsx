@@ -13,7 +13,7 @@ import {
   type Receipt,
   type Stock,
 } from "@/lib/pos/products";
-import { loadStock, nextTxnNumber, peekTxnNumber, saveStock } from "@/lib/pos/storage";
+import { loadStock, nextTxnNumber, qrReference, saveStock } from "@/lib/pos/storage";
 import { cn } from "@/lib/utils";
 import { CardScreen } from "./card-screen";
 import { CashScreen } from "./cash-screen";
@@ -107,7 +107,7 @@ export function Kiosk() {
   const chooseMethod = (method: PaymentMethod) => {
     if (method === "QR Payment") {
       const now = new Date();
-      setQr({ seed: now.getTime() + total, reference: peekTxnNumber(now) });
+      setQr({ seed: now.getTime() + total, reference: qrReference(now) });
       setScreen("qr");
     } else {
       setScreen(method === "Cash" ? "cash" : "card");

@@ -42,7 +42,7 @@ Receipt → New Transaction
 | **Tailwind CSS v4** | Consistent spacing, colours and large touch targets without a separate stylesheet per screen. |
 | **lucide-react icons** | Clear, consistent icons for products and payment methods. |
 | **Hard-coded product list** (`lib/pos/products.ts`) | Six products is a small, fixed menu; a server or database adds nothing for the exam. |
-| **Browser `localStorage`** | Keeps the transaction counter (so every TXN number is unique) and the remaining stock between reloads, with no backend. |
+| **Browser `localStorage`** | Keeps the transaction counter and the remaining stock between reloads, with no backend. A TXN number is the sale's date and time plus that counter (`TXN-20261007-184512-0001`), so it stays unique even in a new browser or after storage is cleared. |
 | **Money in integer centavos** | Avoids floating-point errors such as `0.1 + 0.2 = 0.30000000000000004`; `₱45.00` is stored as `4500`. |
 | **Receipt is a snapshot** | The completed order is copied into the receipt, so clearing the cart for the next customer cannot change it. |
 
