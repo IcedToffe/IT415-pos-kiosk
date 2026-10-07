@@ -50,6 +50,8 @@ export function Kiosk() {
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const { toast, show: notify } = useToast();
   const mainRef = useRef<HTMLElement>(null);
+  /** True once a payment has been accepted, so a second tap cannot complete it again. */
+  const completing = useRef(false);
 
   // Saved stock lives in localStorage, which only exists in the browser.
   // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -116,12 +118,15 @@ export function Kiosk() {
 
   // ---------- Payment ----------
   const completeTransaction = (method: PaymentMethod, paid: number) => {
+    if (completing.current) return; // blocks double-submits
     // Last safety checks: an invalid payment must never create a receipt.
     if (lines.length === 0 || paid < total) {
       return notify("Payment could not be completed", "error");
     }
     const short = lines.find((l) => l.qty > (stock[l.id] ?? 0));
     if (short) return notify(`Insufficient stock for ${short.name}`, "error");
+
+    completing.current = true;
 
     // Deduct stock only after a successful payment.
     const nextStock = { ...stock };
@@ -144,6 +149,7 @@ export function Kiosk() {
   };
 
   const newTransaction = () => {
+    completing.current = false;
     setCart({});
     setReceipt(null);
     setCategory("All");
